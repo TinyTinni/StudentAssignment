@@ -10,12 +10,35 @@ When there is no solution, an optimizer an be used instead of an solver (the ene
 
 The solver uses [Z3](https://github.com/Z3Prover/z3) and the [Rust binding of Z3](https://docs.rs/z3/0.6.0/z3/index.html).
 
-License is the same as the Z3 License: MIT
+## Example Problem
+
+Imagine you have 3 Students $s_0, s_1$ and $s_2$ and you want to give them private lectures on time $t_0, t_1$ and $t_2$.
+
+Since you are a good teacher, you give them the ability to express wishes, which timeslot they want to attend.
+In this example, every student has to attend to exactly 1 timeslot and every timeslot has a capacity of 1 student.
+
+- $s_0: [t_1]$
+- $s_1: [t_0, t_1, t_2]$
+- $s_2: [t_0, t_1]$
+
+This program finds a solution for this problem and assigns the students to their timeslots. Solution:
+
+- $s_0 -> t_1$
+- $s_1 -> t_2$
+- $s_2 -> t_0$
 
 ## How to Use
 
 Give the program a JSON file.
 Please have a look at the [example](./example.json) file.
+
+You can change the student capacity per timeslot in the json.
+The amount of timeslots, each student has to visit is the program option `--visits`.
+
+```
+USAGE:
+    student_assignment-rs.exe <input> --visits <visits>
+```
 
 ## License
 
