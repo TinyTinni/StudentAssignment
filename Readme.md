@@ -40,6 +40,22 @@ USAGE:
     student_assignment-rs.exe <input> --visits <visits>
 ```
 
+## Build
+
+### On Windows
+
+You either have to install Z3 and add the includes and library path into the global path,
+or build Z3 locally and link it statically.
+
+The Rust package supports this, 
+but due to a missing feature in cargo [(issue 7914)](https://github.com/rust-lang/cargo/issues/7914),
+you have to enable the option in the [Cargo.toml](./Cargo.toml) and disable the Unix specification of Z3 inclusion.
+
+
+### On Linux
+
+Install Z3 package and run `cargo build`.
+
 ## License
 
 [MIT License](./LICENSE) © Matthias Möller. Made with ♥ in Germany.
