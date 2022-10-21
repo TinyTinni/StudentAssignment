@@ -37,7 +37,7 @@ fn main_opts<'a>(
     table.max_attendees(&ctx, &solver);
 
     solver.check();
-    let model = solver.get_model();
+    let model = solver.get_model().unwrap();
 
     Ok((model, table))
 }
@@ -51,7 +51,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         let assignments = table.assignments_per_attendee(&a);
         if let Some((timeslot_id, _)) = assignments
             .enumerate()
-            .find(|(_, x)| model.eval(*x).unwrap().as_i64().unwrap() == 1)
+            .find(|(_, x)| model.eval(*x, true).unwrap().as_i64().unwrap() == 1)
         {
             println!(" {} -> {}", a.name, table.timeslots[timeslot_id].name);
         } else {

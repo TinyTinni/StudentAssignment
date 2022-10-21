@@ -12,7 +12,7 @@ structopt = "^0.3"
 
 # not possible to put it in z3 dependencies yet: https://github.com/rust-lang/cargo/issues/7914
 [target.'cfg(unix)'.dependencies.z3]
-"z3" = {version = "^0.6"}
+"z3" = {version = "^0.11"}
 
 #[target.'cfg(windows)'.dependencies]
-#"z3" = {version = "^0.6", features = ["static-link-z3"]}
+#"z3" = {version = "^0.11", features = ["static-link-z3"]}
