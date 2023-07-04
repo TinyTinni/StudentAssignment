@@ -1,24 +1,23 @@
-extern crate structopt;
+extern crate clap;
 
+use clap::Parser;
 use std::fs::File;
 use std::path::PathBuf;
-use structopt::StructOpt;
 use z3::*;
 
 mod solver;
-
-#[derive(StructOpt)]
-#[structopt(name = "Student Assignment")]
 /// Assigns students to timelots with specific a criteria.
 ///
 /// Current criteria: Every student has to visit exactly "visits" many time slots
+#[derive(clap::Parser, Debug)]
+#[command(author, version, about)]
 struct Opt {
     /// json input file path
-    #[structopt(parse(from_os_str))]
+    #[arg(short, long)]
     input: PathBuf,
 
     /// the amount of timeslots every attendee has to visit
-    #[structopt(long = "visits", default_value = "1")]
+    #[arg(short, long, default_value = "1")]
     visits: u64,
 }
 
@@ -43,7 +42,7 @@ fn main_opts<'a>(
 }
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let opt = Opt::from_args();
+    let opt = Opt::parse();
     let cfg = Config::new();
     let ctx = Context::new(&cfg);
     let (model, table) = main_opts(&opt, &ctx)?;
