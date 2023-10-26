@@ -73,7 +73,25 @@ mod tests {
         let ctx = Context::new(&cfg);
         let result = main_opts(&opt, &ctx);
         assert!(result.is_ok());
-        let (_model, _table) = result.unwrap();
+        let (model, table) = result.unwrap();
+        assert_eq!(table.assignments.len(), 9);
+        for a in table.attendees.iter() {
+            let assignments = table.assignments_per_attendee(&a);
+            if let Some((timeslot_id, _)) = assignments
+                .enumerate()
+                .find(|(_, x)| model.eval(*x, true).unwrap().as_i64().unwrap() == 1)
+            {
+                if a.name == "John" {
+                    assert_eq!(table.timeslots[timeslot_id].name, "room 1 10:00-11:00");
+                } else if a.name == "Peter" {
+                    assert_eq!(table.timeslots[timeslot_id].name, "room 0 11:30-12:30");
+                } else if a.name == "Maggie" {
+                    assert_eq!(table.timeslots[timeslot_id].name, "room 0 10:00-11:00");
+                }
+            } else {
+                panic!("no assignment found for {}", a.name);
+            }
+        }
         //todo: check if correctly assigned
     }
 }

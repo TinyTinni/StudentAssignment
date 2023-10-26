@@ -1,4 +1,5 @@
 # Student Assignment
+[![Rust](https://github.com/TinyTinni/student_assignment/actions/workflows/rust.yml/badge.svg)](https://github.com/TinyTinni/student_assignment/actions/workflows/rust.yml)
 
 Problem: You have n students and offer k private lectures at different times.
 Each student has to visit one lecture. So they can register themselves, which of the k private lectures they have time to attend.
