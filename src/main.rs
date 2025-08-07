@@ -25,15 +25,15 @@ fn main_opts(
     opt: &Opt,
     ctx: &Context,
 ) -> Result<(Model, solver::AssignmentTable), Box<dyn std::error::Error>> {
-    let solver = Solver::new(&ctx);
+    let solver = Solver::new(ctx);
 
     let file = File::open(&opt.input).unwrap();
     let reader = std::io::BufReader::new(file);
 
-    let table = solver::AssignmentTable::from_json(&ctx, &solver, reader)?;
+    let table = solver::AssignmentTable::from_json(ctx, &solver, reader)?;
 
-    table.eq_visits(&ctx, &solver, opt.visits);
-    table.max_attendees(&ctx, &solver);
+    table.eq_visits(ctx, &solver, opt.visits);
+    table.max_attendees(ctx, &solver);
 
     solver.check();
     let model = solver.get_model().unwrap();
@@ -47,7 +47,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let ctx = Context::new(&cfg);
     let (model, table) = main_opts(&opt, &ctx)?;
     for a in table.attendees.iter() {
-        let assignments = table.assignments_per_attendee(&a);
+        let assignments = table.assignments_per_attendee(a);
         if let Some((timeslot_id, _)) = assignments
             .enumerate()
             .find(|(_, x)| model.eval(*x, true).unwrap().as_i64().unwrap() == 1)

@@ -58,16 +58,16 @@ impl AssignmentTable {
         let mut assignments = Vec::with_capacity(attendees.len() * timeslots.len());
 
         //adding a rules here already
-        let bool_constrainer = BoolConstrainer::new(&ctx);
+        let bool_constrainer = BoolConstrainer::new(ctx);
         for (a_i, a) in attendees.iter_mut().enumerate() {
             for t in timeslots.iter() {
                 a.id = a_i;
-                let expr = Int::new_const(&ctx, format!("a_{}_{}", a_i, t.id));
+                let expr = Int::new_const(ctx, format!("a_{}_{}", a_i, t.id));
 
                 if !a.wishlist.contains(&t.id) {
-                    bool_constrainer.zero(&solver, &expr);
+                    bool_constrainer.zero(solver, &expr);
                 } else {
-                    bool_constrainer.zero_or_one(&solver, &expr);
+                    bool_constrainer.zero_or_one(solver, &expr);
                 }
                 assignments.push(expr);
             }
@@ -81,20 +81,20 @@ impl AssignmentTable {
     }
 
     pub fn eq_visits(&self, ctx: &Context, solver: &Solver, min_visits: u64) {
-        let min = Int::from_u64(&ctx, min_visits);
+        let min = Int::from_u64(ctx, min_visits);
 
         for a in self.attendees.iter() {
             let row: Vec<_> = self.assignments_per_attendee(a).collect();
-            let sum = Int::add(&ctx, &row);
+            let sum = Int::add(ctx, &row);
             solver.assert(&sum._eq(&min));
         }
     }
 
     pub fn max_attendees(&self, ctx: &Context, solver: &Solver) {
         for t in &self.timeslots {
-            let timeslot_capacity = Int::from_u64(&ctx, t.max_capacity as u64);
+            let timeslot_capacity = Int::from_u64(ctx, t.max_capacity as u64);
             let row: Vec<_> = self.assignments_per_timeslot(t).collect();
-            let sum = Int::add(&ctx, &row);
+            let sum = Int::add(ctx, &row);
             solver.assert(&sum._eq(&timeslot_capacity));
         }
     }
@@ -108,8 +108,8 @@ struct BoolConstrainer {
 impl BoolConstrainer {
     fn new(ctx: &Context) -> BoolConstrainer {
         BoolConstrainer {
-            one: Int::from_u64(&ctx, 1),
-            zero: Int::from_u64(&ctx, 0),
+            one: Int::from_u64(ctx, 1),
+            zero: Int::from_u64(ctx, 0),
         }
     }
     fn zero_or_one(&self, solver: &Solver, ast: &Int) {
