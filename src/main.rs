@@ -21,10 +21,10 @@ struct Opt {
     visits: u64,
 }
 
-fn main_opts<'a>(
+fn main_opts(
     opt: &Opt,
-    ctx: &'a Context,
-) -> Result<(Model<'a>, solver::AssignmentTable<'a>), Box<dyn std::error::Error>> {
+    ctx: &Context,
+) -> Result<(Model, solver::AssignmentTable), Box<dyn std::error::Error>> {
     let solver = Solver::new(&ctx);
 
     let file = File::open(&opt.input).unwrap();
